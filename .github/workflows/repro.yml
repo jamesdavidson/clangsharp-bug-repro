@@ -30,7 +30,7 @@ jobs:
           dotnet-version: 10.0.x
       - run: dotnet tool install -g ClangSharpPInvokeGenerator --version 21.1.8.4
       - run: >
-          /Users/runner/.dotnet/tools/ClangSharpPInvokeGenerator
+          ClangSharpPInvokeGenerator
           --language
           c
           --file
