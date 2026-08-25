@@ -1,0 +1,45 @@
+---
+name: repro
+on:
+  workflow_dispatch:
+    inputs: {}
+
+jobs:
+  build-native:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            runtime: osx-arm64
+          - os: macos-15-intel
+            runtime: osx-x64
+          - os: windows-2022
+            runtime: win-x64
+          - os: ubuntu-24.04
+            runtime: linux-x64
+          - os: ubuntu-24.04-arm
+            runtime: linux-arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          show-progress: false
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet tool install -g ClangSharpPInvokeGenerator --version 21.1.8.4
+      - run: >
+          /Users/runner/.dotnet/tools/ClangSharpPInvokeGenerator
+          --language
+          c
+          --file
+          bug.h
+          --output
+          Bug.${{ runner.os }}.${{ runner.arch }}.cs
+          --namespace
+          Bug.${{ runner.os }}${{ runner.os }}
+      - name: Build project and create NuGet package
+        run: |
+          ${{ runner.os == 'Windows' && 'type' || 'cat' }} Bug.${{ runner.os }}.${{ runner.arch }}.cs
+          dotnet build
