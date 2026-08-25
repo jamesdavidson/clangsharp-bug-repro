@@ -9,16 +9,16 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-latest
-            runtime: osx-arm64
-          - os: macos-15-intel
-            runtime: osx-x64
+          # - os: macos-latest
+          #   runtime: osx-arm64
+          # - os: macos-15-intel
+          #   runtime: osx-x64
           - os: windows-2022
             runtime: win-x64
-          - os: ubuntu-24.04
-            runtime: linux-x64
-          - os: ubuntu-24.04-arm
-            runtime: linux-arm64
+          # - os: ubuntu-24.04
+          #   runtime: linux-x64
+          # - os: ubuntu-24.04-arm
+          #   runtime: linux-arm64
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
