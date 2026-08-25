@@ -15,9 +15,9 @@ jobs:
           #   runtime: osx-x64
           - os: windows-2022
             runtime: win-x64
-          - os: ubuntu-24.04
+          - os: ubuntu-26.04
             runtime: linux-x64
-          - os: ubuntu-24.04-arm
+          - os: ubuntu-26.04-arm
             runtime: linux-arm64
     runs-on: ${{ matrix.os }}
     steps:
@@ -28,6 +28,11 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
+      - if: ${{ runner.os == 'Linux' }}
+        run: |
+          apt update -qq -y
+          DEBIAN_FRONTEND=noninteractive apt-get install -qq -y --no-install-recommends tzdata
+          apt install -qq -y clang
       - run: dotnet tool install -g ClangSharpPInvokeGenerator --version 21.1.8.4
       - run: >
           ClangSharpPInvokeGenerator
@@ -39,7 +44,6 @@ jobs:
           Bug.${{ runner.os }}.${{ runner.arch }}.cs
           --namespace
           Bug.${{ runner.os }}.${{ runner.arch }}
-          ${{ runner.os == 'Linux' && '--no-resource-directory-detection' || '' }}
       - name: Build project and create NuGet package
         run: |
           ${{ runner.os == 'Windows' && 'type' || 'cat' }} Bug.${{ runner.os }}.${{ runner.arch }}.cs
