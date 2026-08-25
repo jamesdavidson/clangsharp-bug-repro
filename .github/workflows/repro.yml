@@ -33,6 +33,8 @@ jobs:
           sudo apt -o DPkg::Lock::Timeout=10 update -qq -y
           DEBIAN_FRONTEND=noninteractive sudo apt install -qq -y --no-install-recommends tzdata
           sudo apt install -qq -y clang
+      - if: ${{ runner.os == 'Linux' }}
+        run: sed -E -i.bak 's/(^|[^[:alnum:]_])uint64_t([[:space:]]+[^:;{}]*:)/\1unsigned long long\2/g' bug.h
       - run: dotnet tool install -g ClangSharpPInvokeGenerator --version 21.1.8.4
       - run: >
           ClangSharpPInvokeGenerator
