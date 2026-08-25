@@ -30,9 +30,9 @@ jobs:
           dotnet-version: 10.0.x
       - if: ${{ runner.os == 'Linux' }}
         run: |
-          apt -o DPkg::Lock::Timeout=10 update -qq -y
-          DEBIAN_FRONTEND=noninteractive apt-get install -qq -y --no-install-recommends tzdata
-          apt install -qq -y clang
+          sudo apt -o DPkg::Lock::Timeout=10 update -qq -y
+          DEBIAN_FRONTEND=noninteractive sudo apt install -qq -y --no-install-recommends tzdata
+          sudo apt install -qq -y clang
       - run: dotnet tool install -g ClangSharpPInvokeGenerator --version 21.1.8.4
       - run: >
           ClangSharpPInvokeGenerator
