@@ -38,7 +38,7 @@ jobs:
           --output
           Bug.${{ runner.os }}.${{ runner.arch }}.cs
           --namespace
-          Bug.${{ runner.os }}${{ runner.os }}
+          Bug.${{ runner.os }}.${{ runner.arch }}
       - name: Build project and create NuGet package
         run: |
           ${{ runner.os == 'Windows' && 'type' || 'cat' }} Bug.${{ runner.os }}.${{ runner.arch }}.cs
